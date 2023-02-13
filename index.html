@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma météo</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <div id="body">
+        <div class="card">
+            <h1 class="title">Ma météo</h1>
+            <div class="form">
+                <label for="ville">Entrez la ville</label>
+                <div class="input">
+                    <input type="text" name="ville" id="ville" placeholder="Entrez la ville" />
+                    <button id="button" onclick="meteo(event);">OK</button>
+                </div>
+            </div>
+            
+            <hr>
+            <h3 style="margin-top: 20px;">Les températures de la journée</h3>
+            <div class="weathers">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        
+        function meteo(event) {
+            document.querySelector(".weathers").innerHTML = "";
+            var count = 10;
+            var ville = document.querySelector("#ville").value;
+            var meteo_url = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${ville}&mode=json&units=metric&cnt=${count}&APPID=94c6cf0868fa5cb930a5e2d71baf0dbf`;
+            fetch(meteo_url, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json",
+                }
+            }
+            ).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    // let content = "";
+
+                    for (let i = 0; i < data.list.length; i++) {
+                        // content += `<div class="weather">
+                        //     <div class="icon">
+                        //         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        //             style="color: rgba(212, 212, 14, 0.568)" stroke="currentColor" class="w-6 h-6">
+                        //             <path stroke-linecap="round" stroke-linejoin="round"
+                        //                 d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                        //         </svg>
+                        //     </div>
+                        //     <div class="temp">
+                        //         <h4 class="temperature">${data.list[i].temp.day}°C</h4>
+                        //     </div>
+                        // </div>`
+
+                        document.querySelector(".weathers").innerHTML += `<div class="weather">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    style="color: rgba(212, 212, 14, 0.568)" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                                </svg>
+                            </div>
+                            <div class="temp">
+                                <p  style="text-align:center">Jour ${i+1}</p>
+                                <h4 class="temperature">${data.list[i].temp.day}°C</h4>
+                            </div>
+                        </div>`
+                    }
+
+                    // document.querySelector(".weathers").innerHTML = content;
+                })
+
+                .catch(e => {
+                    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                    console.log("erreur : " + e.message);
+                    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                })
+        }
+
+
+
+    </script>
+</body>
+
+</html>
